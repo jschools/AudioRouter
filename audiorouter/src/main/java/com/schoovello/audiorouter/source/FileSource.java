@@ -1,5 +1,7 @@
 package com.schoovello.audiorouter.source;
 
+import com.schoovello.audiorouter.buffer.AudioBuffer;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -46,8 +48,27 @@ public class FileSource implements AudioSource {
 	}
 
 	@Override
-    public int readFrames(int frameCount, byte[] buffer, int offset) throws IOException {
-		return mInputStream.read(buffer, offset, frameCount * mFrameSize);
-    }
+	public AudioBuffer read(int frameCount) throws IOException {
+		final int requestedBufferSize = frameCount * mFrameSize;
+		final AudioBuffer buffer = AudioBuffer.obtain(requestedBufferSize);
 
+		int totalReadCount = 0;
+		int singleReadCount;
+
+		while (totalReadCount < requestedBufferSize) {
+			singleReadCount = mInputStream.read(buffer.data, totalReadCount, requestedBufferSize - totalReadCount);
+			if (singleReadCount < 0) {
+				if (totalReadCount > 0) {
+					break;
+				} else {
+					return null;
+				}
+			}
+			totalReadCount += singleReadCount;
+		}
+
+		buffer.setSize(totalReadCount);
+
+		return buffer;
+	}
 }

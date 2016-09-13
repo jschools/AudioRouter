@@ -1,4 +1,6 @@
-package com.schoovello.audiorouter.source;
+package com.schoovello.audiorouter.sink;
+
+import com.schoovello.audiorouter.buffer.AudioBuffer;
 
 import java.io.IOException;
 
@@ -21,6 +23,6 @@ public interface AudioSink {
 
 	void initBlocking() throws Exception;
 
-	void write(byte[] buffer, int offset, int length) throws IOException;
+	void write(AudioBuffer buffer) throws IOException;
 
 }

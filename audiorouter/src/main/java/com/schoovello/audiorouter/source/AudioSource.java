@@ -1,5 +1,7 @@
 package com.schoovello.audiorouter.source;
 
+import com.schoovello.audiorouter.buffer.AudioBuffer;
+
 import java.io.IOException;
 
 import javax.sound.sampled.AudioFormat;
@@ -25,15 +27,6 @@ public interface AudioSource {
 
 	AudioFormat getAudioFormat();
 
-	/**
-	 * Reads the given number of frames into the buffer
-	 *
-	 * @param frameCount    the number of frames to attempt to read
-	 * @param buffer        the buffer to write into
-	 * @param offset the index into buffer at which to start writing
-	 * @return the number of bytes written to buffer
-	 * @throws IOException
-	 */
-	int readFrames(int frameCount, byte[] buffer, int offset) throws IOException;
+	AudioBuffer read(int frameCount) throws IOException;
 
 }

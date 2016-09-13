@@ -1,5 +1,7 @@
 package com.schoovello.audiorouter.buffer;
 
+import com.schoovello.audiorouter.log.Log;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -30,18 +32,22 @@ public class AudioBuffer implements Comparable<AudioBuffer> {
 	/**
 	 * The number of valid elements in the buffer, starting with index 0
 	 */
-	private int size;
+	private int mSize;
 
 	public AudioBuffer(int length) {
-		System.out.println("Allocating buffer of length " + length);
+		Log.d("Allocating buffer of length " + length);
 		data = new byte[length];
+	}
+
+	public void setSize(int size) {
+		this.mSize = size;
 	}
 
 	/**
 	 * @return The number of elements in the buffer. This may be smaller than data.length.
 	 */
 	public int size() {
-		return size;
+		return mSize;
 	}
 
 	public void recycle() {
