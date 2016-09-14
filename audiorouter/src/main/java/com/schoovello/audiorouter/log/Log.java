@@ -2,7 +2,7 @@ package com.schoovello.audiorouter.log;
 
 public class Log {
 
-	private static long sStartTime;
+	private static long sStartTime = -1;
 
 	public static void startNow() {
 		sStartTime = System.currentTimeMillis();
@@ -13,6 +13,10 @@ public class Log {
 	}
 
 	public static String getCurrentTimeFormatted() {
+		if (sStartTime < 0) {
+			sStartTime = System.currentTimeMillis();
+		}
+
 		long diff = System.currentTimeMillis() - sStartTime;
 
 		int minutes = (int) (diff / (1000 * 60));
