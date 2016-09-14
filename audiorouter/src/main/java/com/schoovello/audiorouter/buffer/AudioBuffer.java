@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Copyright 2016 Jonathan
@@ -24,6 +25,9 @@ import java.util.List;
  */
 public class AudioBuffer implements Comparable<AudioBuffer> {
 
+	private static AtomicInteger sAllocationCounter = new AtomicInteger(0);
+	private static AtomicInteger sAllocationAccumulator = new AtomicInteger(0);
+
 	/**
 	 * The backing buffer
 	 */
@@ -35,7 +39,10 @@ public class AudioBuffer implements Comparable<AudioBuffer> {
 	private int mSize;
 
 	public AudioBuffer(int length) {
-		Log.d("Allocating buffer of length " + length);
+		int allocationCount = sAllocationCounter.incrementAndGet();
+		int allocationSize = sAllocationAccumulator.addAndGet(length);
+
+		Log.d("Allocating buffer of length " + length + " (allocationCount:" + allocationCount + " totalSize:" + allocationSize + ")");
 		data = new byte[length];
 	}
 

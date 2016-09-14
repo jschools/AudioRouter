@@ -44,7 +44,6 @@ public class BufferPipe implements AudioPipe {
 
 	@Override
 	public void write(AudioBuffer buffer) throws IOException {
-		Log.d("Appending to buffer pipe: " + buffer.size() / mFrameSize);
 		try {
 			if (buffer.size() > 0) {
 				mQueue.put(buffer);
@@ -62,11 +61,10 @@ public class BufferPipe implements AudioPipe {
 		}
 
 		mTotalBytesWritten += buffer.size();
-		Log.d("BufferPipe: totalWrittenFrames=" + mTotalBytesWritten / mFrameSize);
 	}
 
 	@Override
-	public AudioBuffer read(int frameCount) throws IOException {
+	public AudioBuffer read(int byteCount) throws IOException {
 		try {
 			if (mInitBufferSizeRemaining > 0) {
 				Log.d("Buffer pipe waiting for frames: " + mInitBufferSizeRemaining / mFrameSize);

@@ -27,6 +27,6 @@ public interface AudioSource {
 
 	AudioFormat getAudioFormat();
 
-	AudioBuffer read(int frameCount) throws IOException;
+	AudioBuffer read(int byteCount) throws IOException;
 
 }

@@ -124,11 +124,12 @@ public class AudioPump {
 	}
 
 	private void pumpLoop() throws IOException {
-		int framesPumped = pump(mInput, mOutput, mBufferFrameCount);
+		int pumpByteCount = mBufferFrameCount * mInputFrameSize;
+		int bytesPumped = pump(mInput, mOutput, pumpByteCount);
 
-		postPump(mInput, mOutput, framesPumped);
+		postPump(mInput, mOutput, pumpByteCount);
 
-		if (framesPumped < 0) {
+		if (bytesPumped < 0) {
 			stop();
 		}
 	}
@@ -141,20 +142,16 @@ public class AudioPump {
 		return mInputFrameSize;
 	}
 
-	protected int pump(AudioSource source, AudioSink sink, int frameCount) throws IOException {
-		long startTime = System.currentTimeMillis();
-		AudioBuffer buffer = source.read(frameCount);
-		long readDurationMs = System.currentTimeMillis() - startTime;
-		Log.d("Read took " + readDurationMs + "ms");
+	protected int pump(AudioSource source, AudioSink sink, int byteCount) throws IOException {
+		AudioBuffer buffer = source.read(byteCount);
 		if (buffer == null) {
 			return -1;
 		}
 		sink.write(buffer);
-		return buffer.size() / mInputFrameSize;
+		return buffer.size();
 	}
 
-	protected void postPump(AudioSource source, AudioSink sink, int framesPumped) {
-		Log.d(mName + " Pumped frames: " + framesPumped);
+	protected void postPump(AudioSource source, AudioSink sink, int bytesPumped) {
 	}
 
 	public interface AudioPumpListener {

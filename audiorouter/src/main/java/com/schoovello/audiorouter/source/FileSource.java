@@ -29,7 +29,6 @@ public class FileSource implements AudioSource {
 	private File mFile;
     private AudioInputStream mInputStream;
 	private AudioFormat mFormat;
-	private int mFrameSize;
 
     public FileSource(File file) {
 		mFile = file;
@@ -39,7 +38,6 @@ public class FileSource implements AudioSource {
 	public void initBlocking() throws Exception {
 		mInputStream = AudioSystem.getAudioInputStream(mFile);
 		mFormat = mInputStream.getFormat();
-		mFrameSize = mFormat.getFrameSize();
 	}
 
 	@Override
@@ -48,15 +46,14 @@ public class FileSource implements AudioSource {
 	}
 
 	@Override
-	public AudioBuffer read(int frameCount) throws IOException {
-		final int requestedBufferSize = frameCount * mFrameSize;
-		final AudioBuffer buffer = AudioBuffer.obtain(requestedBufferSize);
+	public AudioBuffer read(int byteCount) throws IOException {
+		final AudioBuffer buffer = AudioBuffer.obtain(byteCount);
 
 		int totalReadCount = 0;
 		int singleReadCount;
 
-		while (totalReadCount < requestedBufferSize) {
-			singleReadCount = mInputStream.read(buffer.data, totalReadCount, requestedBufferSize - totalReadCount);
+		while (totalReadCount < byteCount) {
+			singleReadCount = mInputStream.read(buffer.data, totalReadCount, byteCount - totalReadCount);
 			if (singleReadCount < 0) {
 				if (totalReadCount > 0) {
 					break;

@@ -16,7 +16,7 @@ public class SystemAudioSink implements AudioSink {
 
 	@Override
 	public void initBlocking() throws Exception {
-		AudioFormat format = new AudioFormat(Encoding.PCM_SIGNED, 44_100, 16, 1, 2, 44_100, false);
+		final AudioFormat format = new AudioFormat(Encoding.PCM_SIGNED, 44_100, 16, 1, 2, 44_100, false);
 		mSourceDataLine = AudioSystem.getSourceDataLine(null);
 		mSourceDataLine.open(format);
 
@@ -28,7 +28,8 @@ public class SystemAudioSink implements AudioSink {
 			try {
 				//noinspection InfiniteLoopStatement
 				while (true) {
-					Log.d("OUTPUT framePosition:" + mSourceDataLine.getLongFramePosition());
+					long framePosition = mSourceDataLine.getLongFramePosition();
+					Log.d("OUTPUT framePosition:" + framePosition + "; bytePosition:" + framePosition * format.getFrameSize());
 					Thread.sleep(5);
 				}
 			} catch (InterruptedException e) {
