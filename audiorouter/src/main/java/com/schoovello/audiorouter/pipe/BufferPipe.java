@@ -72,7 +72,7 @@ public class BufferPipe implements AudioPipe {
 			mInitBufferLatch.await();
 			AudioBuffer buffer = mQueue.take();
 			mTotalBytesRead += buffer.size();
-			Log.d("BufferPipe vended " + buffer.size() + " bytes for totalFramesRead=" + mTotalBytesRead / mFrameSize);
+//			Log.d("BufferPipe vended " + buffer.size() + " bytes for totalFramesRead=" + mTotalBytesRead / mFrameSize);
 			return buffer;
 		} catch (InterruptedException e) {
 			ExceptionHandler.handleException(e);

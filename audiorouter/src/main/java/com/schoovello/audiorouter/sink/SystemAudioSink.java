@@ -30,7 +30,7 @@ public class SystemAudioSink implements AudioSink {
 				while (true) {
 					long framePosition = mSourceDataLine.getLongFramePosition();
 					Log.d("OUTPUT framePosition:" + framePosition + "; bytePosition:" + framePosition * format.getFrameSize());
-					Thread.sleep(5);
+					Thread.sleep(1000);
 				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
