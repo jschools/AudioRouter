@@ -7,26 +7,25 @@ import com.schoovello.audiorouter.log.Log;
 import java.io.IOException;
 
 import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioFormat.Encoding;
 
 public class RealtimePipe implements AudioPipe {
 
+	private final AudioFormat mAudioFormat;
 	private double mByteRate;
 	private AudioBufferSplicer mSplicer;
 	private long mFirstWriteTimeNanos = -1L;
 	private int mBytesRead = 0;
 
-	private AudioFormat mAudioFormat;
 	private int mFrameSize;
 
-	public RealtimePipe(float byteRate) {
-		mByteRate = byteRate;
+	public RealtimePipe(AudioFormat audioFormat) {
+		mAudioFormat = audioFormat;
 	}
 
 	@Override
 	public void initBlocking() throws Exception {
 		mSplicer = new AudioBufferSplicer();
-		mAudioFormat = new AudioFormat(Encoding.PCM_SIGNED, 44_100, 16, 1, 2, 44_100, false);
+		mByteRate = mAudioFormat.getFrameRate() * mAudioFormat.getFrameSize();
 		mFrameSize = mAudioFormat.getFrameSize();
 	}
 

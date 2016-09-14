@@ -6,19 +6,22 @@ import com.schoovello.audiorouter.log.Log;
 import java.io.IOException;
 
 import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioFormat.Encoding;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.SourceDataLine;
 
 public class SystemAudioSink implements AudioSink {
 
+	private AudioFormat mAudioFormat;
 	private SourceDataLine mSourceDataLine;
+
+	public SystemAudioSink(AudioFormat audioFormat) {
+		mAudioFormat = audioFormat;
+	}
 
 	@Override
 	public void initBlocking() throws Exception {
-		final AudioFormat format = new AudioFormat(Encoding.PCM_SIGNED, 44_100, 16, 1, 2, 44_100, false);
 		mSourceDataLine = AudioSystem.getSourceDataLine(null);
-		mSourceDataLine.open(format);
+		mSourceDataLine.open(mAudioFormat);
 
 		while (!mSourceDataLine.isOpen()) {
 			// wait
@@ -29,7 +32,7 @@ public class SystemAudioSink implements AudioSink {
 				//noinspection InfiniteLoopStatement
 				while (true) {
 					long framePosition = mSourceDataLine.getLongFramePosition();
-					Log.d("OUTPUT framePosition:" + framePosition + "; bytePosition:" + framePosition * format.getFrameSize());
+					Log.d("OUTPUT framePosition:" + framePosition + "; bytePosition:" + framePosition * mAudioFormat.getFrameSize());
 					Thread.sleep(1000);
 				}
 			} catch (InterruptedException e) {

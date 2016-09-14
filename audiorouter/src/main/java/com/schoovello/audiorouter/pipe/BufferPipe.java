@@ -10,26 +10,25 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioFormat.Encoding;
 
 public class BufferPipe implements AudioPipe {
 
-	private AudioFormat mAudioFormat;
+	private final AudioFormat mAudioFormat;
 	private int mFrameSize;
 	private int mInitialBufferFrames;
 	private CountDownLatch mInitBufferLatch;
 	private int mInitBufferSizeRemaining;
 	private BlockingQueue<AudioBuffer> mQueue;
 
-	public BufferPipe(int initialBufferFrames) {
-		mInitialBufferFrames = initialBufferFrames;
+	public BufferPipe(AudioFormat audioFormat, int initialBufferDurationMs) {
+		mAudioFormat = audioFormat;
+		mInitialBufferFrames = (int) (mAudioFormat.getFrameSize() * (initialBufferDurationMs / 1000f));
 	}
 
 	@Override
 	public void initBlocking() throws Exception {
 		mQueue = new LinkedBlockingQueue<>();
 		mInitBufferLatch = new CountDownLatch(1);
-		mAudioFormat = new AudioFormat(Encoding.PCM_SIGNED, 44_100, 16, 1, 2, 44_100, false);
 		mFrameSize = mAudioFormat.getFrameSize();
 		mInitBufferSizeRemaining = mInitialBufferFrames * mFrameSize;
 	}

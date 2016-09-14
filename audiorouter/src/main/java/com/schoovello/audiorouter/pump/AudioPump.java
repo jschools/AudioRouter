@@ -127,19 +127,9 @@ public class AudioPump {
 		int pumpByteCount = mBufferFrameCount * mInputFrameSize;
 		int bytesPumped = pump(mInput, mOutput, pumpByteCount);
 
-		postPump(mInput, mOutput, pumpByteCount);
-
 		if (bytesPumped < 0) {
 			stop();
 		}
-	}
-
-	protected float getInputFrameRate() {
-		return mInputFrameRate;
-	}
-
-	protected int getInputFrameSize() {
-		return mInputFrameSize;
 	}
 
 	protected int pump(AudioSource source, AudioSink sink, int byteCount) throws IOException {
@@ -149,9 +139,6 @@ public class AudioPump {
 		}
 		sink.write(buffer);
 		return buffer.size();
-	}
-
-	protected void postPump(AudioSource source, AudioSink sink, int bytesPumped) {
 	}
 
 	public interface AudioPumpListener {

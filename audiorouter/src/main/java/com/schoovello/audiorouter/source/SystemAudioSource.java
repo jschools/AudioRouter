@@ -5,18 +5,17 @@ import com.schoovello.audiorouter.buffer.AudioBuffer;
 import java.io.IOException;
 
 import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioFormat.Encoding;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.TargetDataLine;
 
 public class SystemAudioSource implements AudioSource {
 
-	private AudioFormat mAudioFormat;
+	private final AudioFormat mAudioFormat;
 	private int mFrameSize;
 	private TargetDataLine mInput;
 
-	public SystemAudioSource() {
-		mAudioFormat = new AudioFormat(Encoding.PCM_SIGNED, 44_100, 16, 1, 2, 44_100, false);
+	public SystemAudioSource(AudioFormat audioFormat) {
+		mAudioFormat = audioFormat;
 	}
 
 	@Override

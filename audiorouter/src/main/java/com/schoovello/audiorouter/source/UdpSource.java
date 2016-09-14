@@ -7,19 +7,21 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
 import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioFormat.Encoding;
 
 public class UdpSource implements AudioSource {
 
 	private DatagramSocket mSocket;
 	private DatagramPacket mPacket;
-	private AudioFormat mAudioFormat;
+	private final AudioFormat mAudioFormat;
+
+	public UdpSource(AudioFormat audioFormat) {
+		mAudioFormat = audioFormat;
+	}
 
 	@Override
 	public void initBlocking() throws Exception {
 		mSocket = new DatagramSocket(8008);
 		mPacket = new DatagramPacket(new byte[65536], 65536);
-		mAudioFormat = new AudioFormat(Encoding.PCM_SIGNED, 44_100, 16, 1, 2, 44_100, false);
 	}
 
 	@Override

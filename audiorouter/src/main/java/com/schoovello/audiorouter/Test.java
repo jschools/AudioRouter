@@ -8,12 +8,17 @@ import com.schoovello.audiorouter.source.FileSource;
 
 import java.io.File;
 
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioFormat.Encoding;
+
 public class Test {
+
+	private static final AudioFormat FORMAT = new AudioFormat(Encoding.PCM_SIGNED, 44_100, 16, 1, 2, 44_100, false);
 
 	public static void main(String[] args) throws Throwable {
 		File file = new File("/Users/jonathanschooler/Desktop/scratch/audio_test.wav");
 		AudioSource fileSource = new FileSource(file);
-		AudioSink systemAudioSink = new SystemAudioSink();
+		AudioSink systemAudioSink = new SystemAudioSink(FORMAT);
 
 		AudioBufferSplicer smoother = new AudioBufferSplicer();
 
